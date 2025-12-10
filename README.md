@@ -255,10 +255,6 @@ This script was created to work alongside the [Granola MCP Server](https://githu
 
 MIT License - Feel free to use, modify, and share!
 
-## Contributing
-
-Found a bug? Have a feature request? Open an issue or submit a PR!
-
 ## Support
 
 If you find this useful, give it a ⭐️ on GitHub!
