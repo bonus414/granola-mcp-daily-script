@@ -1,0 +1,19 @@
+# Log files from backup script
+backup.log
+backup.error.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Personal backup directories (don't commit actual transcripts)
+transcripts/
+backups/
+granola-backups/
