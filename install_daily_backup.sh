@@ -4,12 +4,26 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PLIST_FILE="com.granola.backup.plist"
 PLIST_DEST="$HOME/Library/LaunchAgents/$PLIST_FILE"
+WRAPPER_SCRIPT="$SCRIPT_DIR/run_backup.sh"
 
 echo "Installing Granola daily backup..."
 echo ""
 
 # Create LaunchAgents directory if it doesn't exist
 mkdir -p "$HOME/Library/LaunchAgents"
+
+# Create wrapper script for launchd (needed for macOS permissions)
+cat > "$WRAPPER_SCRIPT" <<'WRAPPER_EOF'
+#!/bin/bash
+# Wrapper script for Granola backup - allows launchd to run with proper permissions
+# This script needs Full Disk Access permission via /bin/bash
+WRAPPER_EOF
+
+echo "cd \"$SCRIPT_DIR\"" >> "$WRAPPER_SCRIPT"
+echo "/usr/bin/python3 backup_transcripts.py" >> "$WRAPPER_SCRIPT"
+
+chmod +x "$WRAPPER_SCRIPT"
+echo "✓ Created run_backup.sh wrapper script"
 
 # Create plist file
 cat > "$PLIST_DEST" <<EOF
@@ -22,8 +36,7 @@ cat > "$PLIST_DEST" <<EOF
 
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/bin/python3</string>
-        <string>$SCRIPT_DIR/backup_transcripts.py</string>
+        <string>$WRAPPER_SCRIPT</string>
     </array>
 
     <key>StartCalendarInterval</key>
@@ -59,7 +72,18 @@ echo "✓ Loaded launch agent"
 echo ""
 echo "Installation complete!"
 echo ""
-echo "The backup script will now run automatically every day at 11:00 PM."
+echo "⚠️  IMPORTANT: Grant Full Disk Access to /bin/bash"
+echo ""
+echo "Due to macOS privacy protections, you need to grant Full Disk Access:"
+echo "  1. Open System Settings → Privacy & Security → Full Disk Access"
+echo "  2. Click the '+' button"
+echo "  3. Press Command+Shift+G and enter: /bin/bash"
+echo "  4. Select 'bash' and click Open"
+echo "  5. Enable the toggle next to 'bash'"
+echo ""
+echo "Without this, the backup will fail with 'Operation not permitted' errors."
+echo ""
+echo "The backup script will run automatically every day at 11:00 PM."
 echo ""
 echo "Useful commands:"
 echo "  • Test now:         launchctl start com.granola.backup"

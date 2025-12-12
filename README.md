@@ -85,6 +85,18 @@ Saved: 2 new transcripts
 
 This creates a launchd job that runs the script every night at 11 PM.
 
+**5. Grant Full Disk Access (REQUIRED for daily automation):**
+
+Due to macOS privacy protections, you must grant Full Disk Access to `/bin/bash`:
+
+1. Open **System Settings** → **Privacy & Security** → **Full Disk Access**
+2. Click the **"+" button**
+3. Press **Command+Shift+G** and enter: `/bin/bash`
+4. Select **bash** and click **Open**
+5. Enable the **toggle** next to `bash`
+
+Without this permission, the automated backup will fail with "Operation not permitted" errors.
+
 ## Configuration
 
 ### Output Directory
@@ -195,6 +207,19 @@ rm ~/Library/LaunchAgents/com.granola.backup.plist
 
 ## Troubleshooting
 
+### "Operation not permitted" error (MOST COMMON)
+
+If you see this in `backup.error.log`, it means macOS is blocking access due to privacy protections.
+
+**Solution:** Grant Full Disk Access to `/bin/bash`:
+
+1. Open **System Settings** → **Privacy & Security** → **Full Disk Access**
+2. Click the **"+" button**
+3. Press **Command+Shift+G** and enter: `/bin/bash`
+4. Select **bash** and click **Open**
+5. Enable the **toggle** next to `bash`
+6. Test: `launchctl start com.granola.backup && cat backup.log`
+
 ### "Cache file not found"
 
 Make sure Granola.ai is installed and has processed some meetings:
@@ -230,6 +255,8 @@ Check error logs:
 ```bash
 cat backup.error.log
 ```
+
+If you see "Operation not permitted", see the first troubleshooting step above.
 
 ### No new transcripts appearing
 
