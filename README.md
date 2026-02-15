@@ -1,5 +1,15 @@
 # Granola Transcript Backup
 
+> **DEPRECATION NOTICE (February 2026):** Granola removed transcript data from their local cache (`cache-v3.json`). The cache still contains meeting metadata (titles, dates, participants) but transcripts are now stored server-side only. This means **this script can no longer extract transcripts**. It will find meetings but report 0 transcripts.
+>
+> **Alternatives:**
+> - [Granola's official MCP](https://go.granola.ai/mcp) — works with Claude Desktop and Claude Code. Supports reading transcripts via `get_meeting_transcript`. This is the supported path forward.
+> - The meeting metadata parsing in this script still works if you only need titles, dates, and participant lists.
+>
+> The script and instructions below are preserved for reference.
+
+---
+
 A simple Python script to automatically backup your [Granola.ai](https://granola.ai) meeting transcripts before they expire from the 2-day cache.
 
 ## Why This Exists
